@@ -13,7 +13,4 @@ public class BotConfig {
 
     @Value("${bot.token}")
     String token;
-
-    @Value("${bot.path}")
-    String path;
 }
