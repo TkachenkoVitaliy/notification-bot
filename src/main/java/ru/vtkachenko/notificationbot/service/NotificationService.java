@@ -3,11 +3,9 @@ package ru.vtkachenko.notificationbot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.vtkachenko.notificationbot.config.BotConfig;
 import ru.vtkachenko.notificationbot.exception.TelegramBotException;
 import ru.vtkachenko.notificationbot.model.SendMessageRequest;
 import ru.vtkachenko.notificationbot.model.SendMessageResponse;
@@ -17,16 +15,15 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class TelegramBot extends TelegramLongPollingBot {
-    private final BotConfig config;
+public class NotificationService {
+
+    private final NotificationTelegramBot bot;
 
     @Autowired
-    public TelegramBot(BotConfig config) {
-        super(config.getToken());
-        this.config = config;
+    public NotificationService(NotificationTelegramBot bot) {
+        this.bot = bot;
     }
 
-    @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
@@ -40,11 +37,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, "Unknown command");
             }
         }
-    }
-
-    @Override
-    public String getBotUsername() {
-        return config.getBotName();
     }
 
     public SendMessageResponse sendMessageToUsers(SendMessageRequest messageRequest) {
@@ -86,7 +78,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(chatId);
         message.setText(text);
         try {
-            execute(message);
+            bot.execute(message);
             log.debug("Sent message - '{}' to user with chatID - {}", text, chatId);
         } catch (TelegramApiException e) {
             log.error("Error occurred when try to send message - '{}' to user with chatId - {}.", text, chatId, e);

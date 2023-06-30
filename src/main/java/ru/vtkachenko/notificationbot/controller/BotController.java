@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vtkachenko.notificationbot.model.SendMessageRequest;
 import ru.vtkachenko.notificationbot.model.SendMessageResponse;
-import ru.vtkachenko.notificationbot.service.TelegramBot;
+import ru.vtkachenko.notificationbot.service.NotificationService;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class BotController {
 
-    private final TelegramBot bot;
+    private final NotificationService notificationService;
 
     @Autowired
-    public BotController(TelegramBot bot) {
-        this.bot = bot;
+    public BotController(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 
     @PostMapping("/send")
@@ -33,7 +33,7 @@ public class BotController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong request - chatIds cannot be empty list");
         }
 
-        SendMessageResponse messageResponse = bot.sendMessageToUsers(messageRequest);
+        SendMessageResponse messageResponse = notificationService.sendMessageToUsers(messageRequest);
 
         if (messageResponse.getSuccessfulIds().isEmpty()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageResponse);

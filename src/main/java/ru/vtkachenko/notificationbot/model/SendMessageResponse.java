@@ -11,8 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class SendMessageResponse {
-    private List<Long> successfulIds = new ArrayList<>();
-    private List<Long> abortedIds = new ArrayList<>();
+    private List<Long> successfulIds;
+    private List<Long> abortedIds;
 
     private String errorMessage;
 

@@ -1,16 +1,35 @@
 package ru.vtkachenko.notificationbot.config;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 @Configuration
-@Data
+@Getter
+@Setter
+@ToString
 public class BotConfig {
 
-    @Value("${bot.username}")
-    String botName;
+    private String botName;
 
-    @Value("${bot.token}")
-    String token;
+    private String token;
+
+    private String webHookPath;
+
+    private SetWebhook setWebhookInstance;
+
+    @Autowired
+    public BotConfig(@Value("${bot.username}") String botName,
+                     @Value("${bot.token}") String token,
+                     @Value("${bot.webHookPath}") String webHookPath) {
+        this.botName = botName;
+        this.token = token;
+        this.webHookPath = webHookPath;
+        this.setWebhookInstance = SetWebhook.builder().url(webHookPath).build();
+        System.out.println(this.toString());
+    }
 }
