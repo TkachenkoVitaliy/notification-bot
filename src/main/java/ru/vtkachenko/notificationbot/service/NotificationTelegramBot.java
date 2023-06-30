@@ -9,7 +9,6 @@ import ru.vtkachenko.notificationbot.config.BotConfig;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class NotificationTelegramBot extends SpringWebhookBot {
             log.info("Register Webhook with status code - {}", statusCode);
             connection.disconnect();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Fail register Webhook", e);
         }
     }
 

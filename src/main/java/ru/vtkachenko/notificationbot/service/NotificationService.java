@@ -16,6 +16,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class NotificationService {
+    private static final String UNKNOWN_COMMAND = "Неизвестная команда";
+    private static final String YOUR_ID_TEMPLATE = "Ваш ID - %s";
+    private static final String KICKED = "kicked";
 
     private final NotificationTelegramBot bot;
 
@@ -25,8 +28,6 @@ public class NotificationService {
     }
 
     public void onUpdateReceived(Update update) {
-        String KICKED = "kicked";
-
         if (update.hasMyChatMember()) {
             String status = update.getMyChatMember().getNewChatMember().getStatus();
             if (status.equals(KICKED)) {
@@ -39,14 +40,15 @@ public class NotificationService {
             log.info("Bot get message - '{}' from user - {}", messageText, chatId);
 
             if ("/start".equals(messageText)) {
-                sendMessage(chatId, String.format("Ваш ID - %s", chatId));
+                sendMessage(chatId, String.format(YOUR_ID_TEMPLATE, chatId));
             } else {
-                sendMessage(chatId, "Unknown command");
+                sendMessage(chatId, UNKNOWN_COMMAND);
             }
         }
     }
 
     public SendMessageResponse sendMessageToUsers(SendMessageRequest messageRequest) {
+        log.info("Execute method sendMessageToUsers - {}", messageRequest);
         List<Long> chatIds = messageRequest.getChatIds();
         String text = messageRequest.getMessageText();
 
@@ -74,12 +76,11 @@ public class NotificationService {
             }
         }
 
-
         return result;
-
     }
 
     private void sendMessage(Long chatId, String text) {
+        log.info("Execute method sendMessage with message - '{}' to user with chatID - {}", text, chatId);
         SendMessage message = new SendMessage();
         message.enableNotification();
         message.setChatId(chatId);
