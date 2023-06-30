@@ -25,7 +25,14 @@ public class NotificationService {
     }
 
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        String KICKED = "kicked";
+
+        if (update.hasMyChatMember()) {
+            String status = update.getMyChatMember().getNewChatMember().getStatus();
+            if (status.equals(KICKED)) {
+                log.info("User with chatId {} stop and block bot", update.getMyChatMember().getChat().getId());
+            }
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
@@ -58,12 +65,12 @@ public class NotificationService {
         SendMessageResponse result =  new SendMessageResponse(successfulIds, abortedIds);
 
         if (abortedIds.isEmpty()) {
-            log.info("Result send message '{}' - {}", text, result.toString());
+            log.info("Result send message '{}' - {}", text, result);
         } else {
             if(successfulIds.isEmpty()) {
-                log.error("Result send message '{}' - {}", text, result.toString());
+                log.error("Result send message '{}' - {}", text, result);
             } else {
-                log.warn("Result send message '{}' - {}", text, result.toString());
+                log.warn("Result send message '{}' - {}", text, result);
             }
         }
 

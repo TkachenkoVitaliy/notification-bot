@@ -3,14 +3,9 @@ package ru.vtkachenko.notificationbot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 import ru.vtkachenko.notificationbot.config.BotConfig;
-import ru.vtkachenko.notificationbot.exception.TelegramBotException;
-import ru.vtkachenko.notificationbot.model.SendMessageRequest;
-import ru.vtkachenko.notificationbot.model.SendMessageResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -36,8 +31,6 @@ public class NotificationTelegramBot extends SpringWebhookBot {
             int statusCode = connection.getResponseCode();
             log.info("Register Webhook with status code - {}", statusCode);
             connection.disconnect();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -18,9 +18,8 @@ public class WebhookController {
     }
 
     @PostMapping("/")
-    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
-        log.info("POST MAPPING - {}", update.toString());
+    public void onUpdateReceived(@RequestBody Update update) {
+        log.debug("POST MAPPING - {}", update.toString());
         notificationService.onUpdateReceived(update);
-        return null;
     }
 }

@@ -30,6 +30,5 @@ public class BotConfig {
         this.token = token;
         this.webHookPath = webHookPath;
         this.setWebhookInstance = SetWebhook.builder().url(webHookPath).build();
-        System.out.println(this.toString());
     }
 }

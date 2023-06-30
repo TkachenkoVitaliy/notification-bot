@@ -15,12 +15,12 @@ import ru.vtkachenko.notificationbot.service.NotificationService;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-public class BotController {
+public class NotificationController {
 
     private final NotificationService notificationService;
 
     @Autowired
-    public BotController(NotificationService notificationService) {
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
